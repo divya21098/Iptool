@@ -40,7 +40,7 @@ Ensure the following are installed:
 
 2. Apply the Kubernetes configurations:
    
-   kubectl apply -f serviceaccount.yaml
+   kubectl apply -f serviceaccount.yaml 
    kubectl apply -f deployment.yaml
    
 3. Verify the deployment:
@@ -62,9 +62,9 @@ This will return all pod IPs in the cluster and detect collision
 
 ## Clean Up
 To remove the deployment:
-```sh
+
 kubectl delete -f deployment.yaml
 kubectl delete -f serviceaccount.yaml
-```
+
 
 
