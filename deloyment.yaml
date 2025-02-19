@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ip-tools-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ip-tools
+  template:
+    metadata:
+      labels:
+        app: ip-tools
+    spec:
+      serviceAccountName: pod-reader-sa
+      containers:
+      - name: ip-tools-container
+        image:  kamadiv/iptool:v1 # Replace with your image name and tag
+        imagePullPolicy: IfNotPresent # Or Always, depending on your needs.
+        args: ["--check-collision", "pod_ips.txt"]  # Pass the argument of the file
+        resources: # Optional: Define resource requests and limits
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+      restartPolicy: Always
