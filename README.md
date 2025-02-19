@@ -1,7 +1,6 @@
 # Iptool
 Task Overview: 
 
-
 In this task, you will create a script called 'ip-tool' to explore IP range collisions in
 our Kubernetes cluster. (This hypothetical scenario is created to make the task practically
 understandable: kubenet will manage the IP networks in a basic Kubernetes cluster. Please
@@ -16,11 +15,23 @@ Dockerfile that runs the script, returns the IP networks, and then stops.
 
 Bonus Task: If you are
 familiar with Kubernetes, create a Kubernetes deployment for the container running the 'ip-tool'
-script.Expectations:
+script.
 
+Pre Requistes:
+Install minikube and docker on local desktop
+Create a docker hub repo for storing image - 
 
-This task is designed to be quite easy, and we do not expect you to spend a lot of time on it.
-However, we do expect production-grade code with proper requirement handling, acceptable test
-coverage, clean code, and understandable git commit messages. You can use any open-source
-libraries and any scripting language you like, but Python is preferred as we use it on a daily
-basis
+Building docker image
+docker build -t ip-tools .
+
+Tagging docker image 
+docker tag ip-tools:latest kamadiv/iptool:v1 
+
+Pushing image in Dockerhub
+docker push kamadiv/iptool:v1   
+
+Commands to run
+kubectl apply -f serviceaccount.yaml
+kubectl apply -f deployment.yaml
+kubectl get pods
+kubectl logs <podname>
