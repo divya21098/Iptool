@@ -1,37 +1,70 @@
-# Iptool
-Task Overview: 
+# IP Tool
 
-In this task, you will create a script called 'ip-tool' to explore IP range collisions in
-our Kubernetes cluster. (This hypothetical scenario is created to make the task practically
-understandable: kubenet will manage the IP networks in a basic Kubernetes cluster. Please
-disregard this scenario for the purpose of the task.)
-Main Task:* Default Function: The 'ip-tool' script should report the configured IP networks to a
-container where the script is deployed. The output from this function should be collected from all
-the containers in the cluster and concatenated together.* Collision Check: Using the '--check-
-collision <file_path>' switch, the script should analyze the concatenated list of IP networks from the
-entire cluster’s output and return any colliding IP networks.Dockerfile Requirement: Provide a
-Dockerfile that runs the script, returns the IP networks, and then stops.
+## Overview
+`ip-tool` is a script designed to explore IP range collisions in a Kubernetes cluster. It retrieves configured IP networks from all containers and identifies any collisions.
+
+## Features
+- Reports configured IP networks from all running pods
+- Detects IP collisions in the cluster using `--check-collision <file_path>`
+- Runs inside a container, deployed via Kubernetes
+
+## Prerequisites
+Ensure the following are installed:
+- [Minikube](https://minikube.sigs.k8s.io/docs/start/)
+- [Docker](https://docs.docker.com/get-docker/)
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+
+### **Set Up Docker Hub Repository**
+1. Create a Docker Hub repository named `iptool`.
+2. Log in to Docker Hub:
+   docker login
+   
+## Build and Push Docker Image
+1. Build the Docker image:
+   
+   docker build -t ip-tools .
+   
+2. Tag the image:
+   
+   docker tag ip-tools:latest kamadiv/iptool:v1
+   
+3. Push the image to Docker Hub:
+   
+   docker push kamadiv/iptool:v1
 
 
-Bonus Task: If you are
-familiar with Kubernetes, create a Kubernetes deployment for the container running the 'ip-tool'
-script.
+## Deploy to Minikube
+1. Start Minikube:
 
-Pre Requistes:
-Install minikube and docker on local desktop
-Create a docker hub repo for storing image - 
+   minikube start
 
-Building docker image
-docker build -t ip-tools .
+2. Apply the Kubernetes configurations:
+   
+   kubectl apply -f serviceaccount.yaml
+   kubectl apply -f deployment.yaml
+   
+3. Verify the deployment:
+   
+   kubectl get pods
+   
+4. Check logs:
+   
+   kubectl logs <pod-name>
+   
 
-Tagging docker image 
-docker tag ip-tools:latest kamadiv/iptool:v1 
+## Running the IP Tool
+### **Default Mode: Collect IP Networks**
 
-Pushing image in Dockerhub
-docker push kamadiv/iptool:v1   
+kubectl logs <pod-name>
 
-Commands to run
-kubectl apply -f serviceaccount.yaml
-kubectl apply -f deployment.yaml
-kubectl get pods
-kubectl logs <podname>
+This will return all pod IPs in the cluster and detect collision
+
+
+## Clean Up
+To remove the deployment:
+```sh
+kubectl delete -f deployment.yaml
+kubectl delete -f serviceaccount.yaml
+```
+
+
